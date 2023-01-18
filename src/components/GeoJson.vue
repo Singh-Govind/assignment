@@ -3,21 +3,21 @@
     Please select a GeoJson file:
     <input type="file" @change="handleFileChange" />
     <button @click="submit">Submit</button>
-    {{ isData ? "True" : "False" }}
   </div>
   <div id="map" style="height: 600px; width: 800px">
-    <l-map ref="map" v-model:zoom="zoom" :center="[47.41322, -1.219482]">
+    <l-map
+      ref="map"
+      :center="[17.35146324412854, 78.44722884470269]"
+      v-model:zoom="zoom"
+    >
       <l-tile-layer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         layer-type="base"
         name="OpenStreetMap"
+        :center="center"
       ></l-tile-layer>
-      <l-polygon
-        v-if="isData"
-        :lat-lngs="getData(polygon.latlngs)"
-        :center="getCenter(center)"
-        color="red"
-      ></l-polygon>
+      <l-geo-json v-if="isData" :geojson="geojson" />
+      <l-polygon :lat-lngs="polygon.latlngs" :color="polygon.color" />
     </l-map>
   </div>
 </template>
@@ -44,8 +44,8 @@ export default {
   data() {
     return {
       isData: false,
-      zoom: 3,
-      center: [47.31322, -1.319482],
+      zoom: 12,
+      center: [17.35146324412854, 78.44722884470269],
       polygon: {
         latlngs: [
           [47.2263299, -1.6222],
@@ -93,9 +93,6 @@ export default {
       reader.readAsText(file);
     },
     submit() {
-      // console.log(this.polygon.latlngs);
-
-      // this.polygon.latlngs = rawData;
       this.isData = true;
     },
     getData(data) {
